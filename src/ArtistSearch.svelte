@@ -7,7 +7,7 @@
 <div class="row justify-content-center mt-2">
   <div class="col-12 col-md-8 col-lg-6 border rounded bg-light p-3">
     <h4 class="mb-1">
-      Search33:
+      Search:
       <small>
         {#if searchTerm}for{/if}
         {searchTerm}
