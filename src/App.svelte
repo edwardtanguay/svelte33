@@ -1,32 +1,41 @@
 <script>
-	export let name;
-	export let message;
+  import { onMount } from "svelte";
+  import ArtistList from "./ArtistList.svelte";
+  import ArtistSearch from "./ArtistSearch.svelte";
+  let searchTerm = "";
+  let artists = [];
+  let displayList = [];
+
+  function filterList(list, query) {
+    return list.filter(item => {
+      return (
+        item.name.toLowerCase().match(query.toLowerCase()) ||
+        item.bio.toLowerCase().match(query.toLowerCase())
+      );
+    });
+  }
+
+  onMount(async () => {
+    const res = await fetch(`data.json`);
+    artists = await res.json();
+    displayList = artists;
+  });
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-	<p>Message: <b>{message}</b></p>
-</main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 3em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+<style global lang="scss">
+  @import "../node_modules/bootstrap/scss/bootstrap.scss";
 </style>
+
+<div class="container">
+  <ArtistSearch
+    bind:searchTerm
+    on:updateSearch={() => {
+      displayList = filterList(artists, searchTerm);
+    }} />
+  <ArtistList bind:artists={displayList} />
+</div>
+
+
+
+
+
